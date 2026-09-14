@@ -1,0 +1,210 @@
+<h2 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Diagram of the shear eigenvectors e_t (tangential) and e_n (normal) in the image plane, showing how a circle is lensed into an ellipse by convergence kappa and shear gamma, elongated along e_t, alongside the complex shear plane where the shear vector sits at twice the angle phi-gamma. Sliders control the convergence, shear magnitude, and orientation; the eigenvalue formulas, reduced shear, and axis ratio of the lensed image are reported.</h2>
+<style>
+.lbl{font-family:var(--font-sans,-apple-system,"Segoe UI",Arial,sans-serif);fill:var(--text-primary,#1a1a1a);font-size:14px}
+.lbl-sm{font-family:var(--font-sans,-apple-system,"Segoe UI",Arial,sans-serif);fill:var(--text-secondary,#6b6b6b);font-size:12px}
+.ctrl-row{display:flex;gap:0.65rem 0.85rem;flex-wrap:wrap;align-items:center;padding:0.3rem 0}
+.ctrl label{font-size:13px;color:var(--text-secondary,#6b6b6b);display:flex;flex-direction:column;gap:4px}
+.ctrl input[type=range]{width:150px;accent-color:#D85A30}
+.stat{background:var(--surface-1,#f5f5f4);border:1px solid var(--border,#d8d8d6);border-radius:var(--radius,8px);padding:0.4rem 0.6rem;min-width:92px}
+.stat .k{font-size:11px;color:var(--text-muted,#8a8a86);white-space:nowrap}
+.stat .v{font-size:15px;font-weight:500;color:var(--text-primary,#1a1a1a)}
+.kse-widget{max-width:800px;margin:0 auto}
+</style>
+<div class="kse-widget">
+<div class="ctrl-row">
+  <div class="ctrl">
+    <label>convergence &kappa;<span id="kappaSliderVal">0.00</span>
+      <input type="range" id="kappaSlider" min="-0.3" max="0.3" step="0.01" value="0">
+    </label>
+  </div>
+  <div class="ctrl">
+    <label>shear magnitude |&gamma;|<span id="gammaSliderVal">0.35</span>
+      <input type="range" id="gammaSlider" min="0" max="0.6" step="0.01" value="0.35">
+    </label>
+  </div>
+  <div class="ctrl">
+    <label>orientation &phi;&gamma;<span id="phiSliderVal">25&deg;</span>
+      <input type="range" id="phiSlider" min="0" max="180" step="1" value="25">
+    </label>
+  </div>
+</div>
+
+<div class="ctrl-row">
+  <div class="stat"><div class="k">&kappa;</div><div class="v" id="kappaVal">0.00</div></div>
+  <div class="stat"><div class="k">&gamma;1</div><div class="v" id="gamma1Val">0.225</div></div>
+  <div class="stat"><div class="k">&gamma;2</div><div class="v" id="gamma2Val">0.268</div></div>
+  <div class="stat"><div class="k">|&gamma;|</div><div class="v" id="gammaMagVal">0.35</div></div>
+  <div class="stat"><div class="k">&phi;&gamma;</div><div class="v" id="phiVal">25&deg;</div></div>
+</div>
+
+<div class="ctrl-row">
+  <div class="stat"><div class="k">&lambda;<sub>t</sub> = 1 &minus; &kappa; &minus; |&gamma;|</div><div class="v" id="lambdaTVal">0.65</div></div>
+  <div class="stat"><div class="k">&lambda;<sub>n</sub> = 1 &minus; &kappa; + |&gamma;|</div><div class="v" id="lambdaNVal">1.35</div></div>
+  <div class="stat"><div class="k">g = &gamma;/(1&minus;&kappa;)</div><div class="v" id="gMagVal">0.35</div></div>
+  <div class="stat"><div class="k">g1</div><div class="v" id="g1Val">0.225</div></div>
+  <div class="stat"><div class="k">g2</div><div class="v" id="g2Val">0.268</div></div>
+  <div class="stat"><div class="k">q = (1&minus;|g|)/(1+|g|)</div><div class="v" id="axisRatioVal">0.48</div></div>
+</div>
+
+<svg width="100%" viewBox="0 0 680 470" style="max-width:680px;height:auto;display:block;margin:0 auto;">
+<defs>
+<marker id="arrCoral" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+<path d="M0,0 L10,5 L0,10 z" fill="#D85A30"/>
+</marker>
+<marker id="arrTeal" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+<path d="M0,0 L10,5 L0,10 z" fill="#1D9E75"/>
+</marker>
+<marker id="arrPurple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+<path d="M0,0 L10,5 L0,10 z" fill="#7F77DD"/>
+</marker>
+</defs>
+
+<text class="lbl-sm" x="210" y="72" text-anchor="middle">image plane (&theta;1, &theta;2)</text>
+<text class="lbl-sm" x="490" y="72" text-anchor="middle">shear phase (&gamma;1, &gamma;2)</text>
+
+<line x1="55" y1="270" x2="365" y2="270" stroke="var(--border,#a3a39e)" stroke-width="1"/>
+<line x1="210" y1="115" x2="210" y2="425" stroke="var(--border,#a3a39e)" stroke-width="1"/>
+<text class="lbl-sm" x="345" y="285">&theta;1</text>
+<text class="lbl-sm" x="218" y="122">&theta;2</text>
+
+<line x1="390" y1="270" x2="590" y2="270" stroke="var(--border,#a3a39e)" stroke-width="1"/>
+<line x1="490" y1="170" x2="490" y2="370" stroke="var(--border,#a3a39e)" stroke-width="1"/>
+<text class="lbl-sm" x="558" y="285">&gamma;1</text>
+<text class="lbl-sm" x="498" y="177">&gamma;2</text>
+
+<circle cx="210" cy="270" r="60" fill="none" stroke="var(--border-strong,#8a8a86)" stroke-width="1.5" stroke-dasharray="4 4"/>
+<circle cx="490" cy="270" r="80" fill="none" stroke="var(--border-strong,#8a8a86)" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+<ellipse id="ellipseImg" cx="210" cy="270" rx="60" ry="60" fill="none" stroke="#D85A30" stroke-width="2.5"/>
+
+<path id="arcPhysical" d="" fill="none" stroke="var(--text-secondary,#6b6b6b)" stroke-width="1.5"/>
+<text id="angleLabelPhysical" class="lbl-sm" text-anchor="middle">&phi;&gamma;</text>
+
+<line id="vecT" x1="210" y1="270" x2="340" y2="270" stroke="#D85A30" stroke-width="2.5" marker-end="url(#arrCoral)"/>
+<text id="labelT" class="lbl" text-anchor="middle">e&#8348;</text>
+
+<line id="vecN" x1="210" y1="270" x2="210" y2="140" stroke="#1D9E75" stroke-width="2.5" marker-end="url(#arrTeal)"/>
+<text id="labelN" class="lbl" text-anchor="middle">e&#8345;</text>
+
+<path id="arcComplex" d="" fill="none" stroke="var(--text-secondary,#6b6b6b)" stroke-width="1.5"/>
+<text id="angleLabelComplex" class="lbl-sm" text-anchor="middle">2&phi;&gamma;</text>
+
+<line id="vecGamma" x1="490" y1="270" x2="590" y2="270" stroke="#7F77DD" stroke-width="2.5" marker-end="url(#arrPurple)"/>
+<text id="labelGamma" class="lbl" text-anchor="middle">&gamma;</text>
+</svg>
+</div>
+
+<script>
+function polar(angleDeg, r, cx, cy){
+  var rad = angleDeg*Math.PI/180;
+  return {x: cx + r*Math.cos(rad), y: cy - r*Math.sin(rad)};
+}
+function arcPath(cx, cy, r, a0, a1){
+  var span = a1-a0;
+  if (span >= 359.5) span = 359.5;
+  a1 = a0+span;
+  var p0 = polar(a0, r, cx, cy);
+  var p1 = polar(a1, r, cx, cy);
+  var largeArc = span > 180 ? 1 : 0;
+  return "M "+p0.x+" "+p0.y+" A "+r+" "+r+" 0 "+largeArc+" 0 "+p1.x+" "+p1.y;
+}
+
+var kappaSlider = document.getElementById("kappaSlider");
+var gammaSlider = document.getElementById("gammaSlider");
+var phiSlider = document.getElementById("phiSlider");
+var ellipseEl = document.getElementById("ellipseImg");
+var vecT = document.getElementById("vecT");
+var vecN = document.getElementById("vecN");
+var labelT = document.getElementById("labelT");
+var labelN = document.getElementById("labelN");
+var arcPhysical = document.getElementById("arcPhysical");
+var angleLabelPhysical = document.getElementById("angleLabelPhysical");
+var vecGamma = document.getElementById("vecGamma");
+var labelGamma = document.getElementById("labelGamma");
+var arcComplex = document.getElementById("arcComplex");
+var angleLabelComplex = document.getElementById("angleLabelComplex");
+
+var Lx=210, Ly=270, Rx=490, Ry=270;
+var DEG = String.fromCharCode(176);
+
+function update(){
+  var kappa = parseFloat(kappaSlider.value);
+  var gamma = parseFloat(gammaSlider.value);
+  var phi = parseFloat(phiSlider.value);
+  var gamma1 = gamma*Math.cos(2*phi*Math.PI/180);
+  var gamma2 = gamma*Math.sin(2*phi*Math.PI/180);
+  // Convergence kappa isotropically (de)magnifies; shear gamma anisotropically
+  // stretches. The Jacobian's eigenbasis is still set by phi_gamma:
+  // e_t = (cos(phi_gamma), sin(phi_gamma)): tangential/degenerate direction,
+  // lambda_t = 1-kappa-|gamma| -- the eigenvalue that vanishes on the
+  // tangential critical curve, and the axis the image is stretched MORE
+  // along (rx below).
+  // e_n = (-sin(phi_gamma), cos(phi_gamma)): normal/non-degenerate
+  // direction, lambda_n = 1-kappa+|gamma|.
+  var lambdaT = 1-kappa-gamma, lambdaN = 1-kappa+gamma;
+
+  // Reduced shear g = gamma/(1-kappa) is what actually sets the observed
+  // image ellipticity/axis ratio (kappa alone just rescales image size).
+  var oneMinusKappa = 1-kappa;
+  var g1 = gamma1/oneMinusKappa;
+  var g2 = gamma2/oneMinusKappa;
+  var gMag = gamma/oneMinusKappa;
+  var axisRatio = (1-gMag)/(1+gMag); // == lambdaT/lambdaN
+
+  var R = 60;
+  var rx = R/lambdaT;
+  var ry = R/lambdaN;
+  ellipseEl.setAttribute("rx", rx);
+  ellipseEl.setAttribute("ry", ry);
+  ellipseEl.setAttribute("transform", "rotate("+(-phi)+" "+Lx+" "+Ly+")");
+
+  var vecLen=130;
+  var pT = polar(phi, vecLen, Lx, Ly);
+  var pN = polar(phi+90, vecLen, Lx, Ly);
+  vecT.setAttribute("x2", pT.x); vecT.setAttribute("y2", pT.y);
+  vecN.setAttribute("x2", pN.x); vecN.setAttribute("y2", pN.y);
+  var lblTPos = polar(phi, vecLen+16, Lx, Ly);
+  labelT.setAttribute("x", lblTPos.x); labelT.setAttribute("y", lblTPos.y);
+  var lblNPos = polar(phi+90, vecLen+16, Lx, Ly);
+  labelN.setAttribute("x", lblNPos.x); labelN.setAttribute("y", lblNPos.y);
+
+  arcPhysical.setAttribute("d", arcPath(Lx,Ly,38,0,phi===0?0.001:phi));
+  var midPhysPos = polar(phi/2, 54, Lx, Ly);
+  angleLabelPhysical.setAttribute("x", midPhysPos.x);
+  angleLabelPhysical.setAttribute("y", midPhysPos.y);
+
+  var scale = 80/0.6;
+  var gLen = gamma*scale;
+  var gAngle = 2*phi;
+  var pGamma = polar(gAngle, gLen, Rx, Ry);
+  vecGamma.setAttribute("x2", pGamma.x); vecGamma.setAttribute("y2", pGamma.y);
+  var lblGammaPos = polar(gAngle, gLen+18, Rx, Ry);
+  labelGamma.setAttribute("x", lblGammaPos.x); labelGamma.setAttribute("y", lblGammaPos.y);
+
+  var gAngleClamped = gAngle % 360; if(gAngleClamped<0) gAngleClamped+=360;
+  arcComplex.setAttribute("d", arcPath(Rx,Ry,26,0,gAngleClamped===0?0.001:gAngleClamped));
+  var midCompPos = polar(gAngleClamped/2, 42, Rx, Ry);
+  angleLabelComplex.setAttribute("x", midCompPos.x);
+  angleLabelComplex.setAttribute("y", midCompPos.y);
+
+  document.getElementById("kappaVal").textContent = kappa.toFixed(2);
+  document.getElementById("gamma1Val").textContent = gamma1.toFixed(3);
+  document.getElementById("gamma2Val").textContent = gamma2.toFixed(3);
+  document.getElementById("gammaMagVal").textContent = gamma.toFixed(2);
+  document.getElementById("phiVal").textContent = phi.toFixed(0)+DEG;
+  document.getElementById("lambdaTVal").textContent = lambdaT.toFixed(2);
+  document.getElementById("lambdaNVal").textContent = lambdaN.toFixed(2);
+  document.getElementById("gMagVal").textContent = gMag.toFixed(2);
+  document.getElementById("g1Val").textContent = g1.toFixed(3);
+  document.getElementById("g2Val").textContent = g2.toFixed(3);
+  document.getElementById("axisRatioVal").textContent = axisRatio.toFixed(2);
+  document.getElementById("kappaSliderVal").textContent = kappa.toFixed(2);
+  document.getElementById("gammaSliderVal").textContent = gamma.toFixed(2);
+  document.getElementById("phiSliderVal").textContent = phi.toFixed(0)+DEG;
+}
+
+kappaSlider.addEventListener("input", update);
+gammaSlider.addEventListener("input", update);
+phiSlider.addEventListener("input", update);
+update();
+</script>
