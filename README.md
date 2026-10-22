@@ -8,4 +8,4 @@ Use the sliders to set κ, the shear strength |γ| and its orientation φγ. The
 
 Runs in any modern browser; nothing to install.
 
-Created by [James Chan](https://sites.google.com/view/jameshhchan/home). Questions: [jchan@amnh.org](mailto:jchan@amnh.org)
+Created by James Chan. Questions: [jchan@amnh.org](mailto:jchan@amnh.org)
